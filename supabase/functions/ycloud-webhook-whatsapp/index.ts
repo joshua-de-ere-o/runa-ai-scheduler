@@ -1,12 +1,14 @@
 // ============================================================
 // Runa AI — YCloud WhatsApp Webhook (Edge Function)
-// Cerebro: recibe inbound → dedupe → memoria → Erika (OpenAI) → responde YCloud
+// Cerebro: recibe inbound → dedupe → memoria → Erika (Lovable AI) → responde YCloud
 // PROHIBIDO: ninguna referencia a Twilio
 // ============================================================
 
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
-import OpenAI from "https://esm.sh/openai@4";
+
+const LOVABLE_AI_URL = "https://ai.gateway.lovable.dev/v1/chat/completions";
+const AI_MODEL = "openai/gpt-5-mini";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -86,9 +88,10 @@ class YCloudProvider {
 }
 
 // ============================================================
-// OpenAI Tool Schemas
+// Tool Schemas (OpenAI-compatible format for Lovable AI Gateway)
 // ============================================================
-const TOOLS: OpenAI.ChatCompletionTool[] = [
+type ChatTool = { type: "function"; function: { name: string; description: string; parameters: Record<string, unknown> } };
+const TOOLS: ChatTool[] = [
   {
     type: "function",
     function: {
@@ -224,11 +227,12 @@ const TOOLS: OpenAI.ChatCompletionTool[] = [
 // ============================================================
 // Tool Executor
 // ============================================================
+type LeadCtx = { id: string; score: number };
 async function executeTool(
   name: string,
   args: Record<string, unknown>,
   supabase: ReturnType<typeof createClient>,
-  lead: { id: string; score: number }
+  lead: LeadCtx
 ): Promise<string> {
   try {
     switch (name) {
@@ -457,29 +461,46 @@ OBJECIONES
 FORMATO FECHAS
 - Interno: ISO 8601 con offset. Al usuario: "Jue 7 Mar, 17:00".`;
 
-    // ── 14. Build messages for OpenAI ─────────────────────────
-    const chatMessages: OpenAI.ChatCompletionMessageParam[] = [
+    // ── 14. Build messages ────────────────────────────────────
+    type ChatMsg = { role: string; content: string; tool_call_id?: string; tool_calls?: unknown[] };
+    const chatMessages: ChatMsg[] = [
       { role: "system", content: systemPrompt },
       ...(history ?? []).map((m: { direction: string; content: string }) => ({
-        role: m.direction === "inbound" ? "user" as const : "assistant" as const,
+        role: m.direction === "inbound" ? "user" : "assistant",
         content: m.content ?? "",
       })),
     ];
 
-    // ── 15. OpenAI with tool calling loop ────────────────────
-    // Lazy init — only instantiated here so GET webhook verification works without OPENAI_API_KEY
-    const openai = new OpenAI({ apiKey: Deno.env.get("OPENAI_API_KEY") ?? "" });
-    const model = Deno.env.get("OPENAI_MODEL") ?? "gpt-4o-mini";
-    let response = await openai.chat.completions.create({
-      model, messages: chatMessages, tools: TOOLS, tool_choice: "auto",
-    });
+    // ── 15. Lovable AI with tool calling loop ─────────────────
+    const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY") ?? "";
+    if (!LOVABLE_API_KEY) {
+      console.error("LOVABLE_API_KEY not configured");
+    }
+
+    const callAI = async (messages: ChatMsg[]) => {
+      const res = await fetch(LOVABLE_AI_URL, {
+        method: "POST",
+        headers: {
+          "Authorization": `Bearer ${LOVABLE_API_KEY}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ model: AI_MODEL, messages, tools: TOOLS, tool_choice: "auto" }),
+      });
+      if (!res.ok) {
+        const errText = await res.text();
+        throw new Error(`Lovable AI error [${res.status}]: ${errText}`);
+      }
+      return res.json();
+    };
+
+    let aiResponse = await callAI(chatMessages);
 
     // Agentic loop: execute tools until no more tool calls
     let iterations = 0;
-    while (response.choices[0]?.finish_reason === "tool_calls" && iterations < 5) {
+    while (aiResponse.choices?.[0]?.finish_reason === "tool_calls" && iterations < 5) {
       iterations++;
-      const toolCalls = response.choices[0].message.tool_calls ?? [];
-      chatMessages.push(response.choices[0].message);
+      const toolCalls = aiResponse.choices[0].message.tool_calls ?? [];
+      chatMessages.push(aiResponse.choices[0].message);
 
       for (const tc of toolCalls) {
         const args = JSON.parse(tc.function.arguments || "{}");
@@ -488,10 +509,10 @@ FORMATO FECHAS
         chatMessages.push({ role: "tool", tool_call_id: tc.id, content: result });
       }
 
-      response = await openai.chat.completions.create({ model, messages: chatMessages, tools: TOOLS, tool_choice: "auto" });
+      aiResponse = await callAI(chatMessages);
     }
 
-    const reply = response.choices[0]?.message?.content ?? "Disculpá, hubo un inconveniente. El equipo te contactará pronto.";
+    const reply = aiResponse.choices?.[0]?.message?.content ?? "Disculpá, hubo un inconveniente. El equipo te contactará pronto.";
 
     // ── 16. Send outbound via YCloud ──────────────────────────
     await provider.sendMessage({ to: from, text: reply });
