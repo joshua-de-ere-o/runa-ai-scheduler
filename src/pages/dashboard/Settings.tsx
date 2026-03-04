@@ -232,9 +232,9 @@ export default function SettingsPage() {
               <div className="bg-accent rounded-lg p-4 border border-primary/20">
                 <p className="text-xs font-semibold text-accent-foreground mb-1">URL del Webhook (Edge Function)</p>
                 <code className="text-xs text-primary break-all">
-                  https://[PROJECT_REF].supabase.co/functions/v1/ycloud-webhook-whatsapp
+                  https://skfthkxfcwaxgcvypkco.supabase.co/functions/v1/ycloud-webhook-whatsapp
                 </code>
-                <p className="text-xs text-muted-foreground mt-2">Pegá esta URL en tu panel de YCloud como webhook URL.</p>
+                <p className="text-xs text-muted-foreground mt-2">Pegá esta URL en tu panel de YCloud como webhook URL. El Verify Token es: <strong>runa-webhook-2026</strong></p>
               </div>
             </div>
             <Button onClick={save} className="gradient-green text-primary-foreground shadow-green hover:opacity-90 gap-1.5">
