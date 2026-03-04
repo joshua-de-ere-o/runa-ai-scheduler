@@ -68,34 +68,17 @@ class YCloudProvider {
   } | null {
     try {
       const p = payload as any;
-      // YCloud webhook: { type: "whatsapp.inbound_message.received", message: { id, from, type, text: { body } } }
-      const message = p?.message ?? p?.data?.message ?? p;
-      const from =
-        message?.from ??
-        message?.waId ??
-        p?.from ??
-        "";
-      const text =
-        message?.text?.body ??
-        message?.text ??
-        message?.body ??
-        p?.text ??
-        p?.body ??
-        "";
-      const messageId =
-        message?.id ??
-        message?.wamId ??
-        p?.messageId ??
-        p?.id ??
-        "";
-      const timestamp =
-        message?.createTime ??
-        message?.timestamp ??
-        p?.timestamp ??
-        new Date().toISOString();
+      // YCloud webhook structure (confirmed):
+      // { type: "whatsapp.inbound_message.received", whatsappInboundMessage: { id, wamid, from, type, text: { body }, sendTime } }
+      const msg = p?.whatsappInboundMessage ?? p?.message ?? p;
+
+      const from = msg?.from ?? "";
+      const text = msg?.text?.body ?? msg?.text ?? msg?.body ?? "";
+      const messageId = msg?.wamid ?? msg?.id ?? "";
+      const timestamp = msg?.sendTime ?? msg?.createTime ?? p?.createTime ?? new Date().toISOString();
 
       if (!from || !messageId) {
-        console.log("parseInbound: missing from or messageId — message keys:", Object.keys(message ?? {}));
+        console.log("parseInbound: missing from or messageId — keys:", Object.keys(msg ?? {}));
         return null;
       }
       return { from: String(from), text: String(text), messageId: String(messageId), timestamp: String(timestamp) };
