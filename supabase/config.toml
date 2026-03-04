@@ -1,8 +1,1 @@
-[functions.ycloud-webhook-whatsapp]
-verify_jwt = false
-
-[functions.send-reminders]
-verify_jwt = false
-
-[functions.send-followups]
-verify_jwt = false
+project_id = "skfthkxfcwaxgcvypkco"
