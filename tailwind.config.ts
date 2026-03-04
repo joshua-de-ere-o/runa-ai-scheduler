@@ -63,10 +63,10 @@ export default {
         },
         mint: "hsl(var(--mint))",
         runa: {
-          green: "hsl(142 71% 45%)",
-          mint: "hsl(166 76% 97%)",
-          dark: "hsl(222 47% 7%)",
-          gray: "hsl(215 16% 43%)",
+          green: "hsl(175 62% 46%)",
+          mint: "hsl(163 47% 94%)",
+          dark: "hsl(207 24% 16%)",
+          gray: "hsl(199 11% 47%)",
         },
       },
       borderRadius: {
