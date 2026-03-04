@@ -19,11 +19,14 @@ export type Database = {
           appointment_date: string
           appointment_type: string | null
           created_at: string
+          end_at: string | null
           id: string
           lead_id: string | null
           notes: string | null
           patient_name: string
           phone_number: string | null
+          service_id: string | null
+          start_at: string | null
           status: string
           updated_at: string
         }
@@ -31,11 +34,14 @@ export type Database = {
           appointment_date: string
           appointment_type?: string | null
           created_at?: string
+          end_at?: string | null
           id?: string
           lead_id?: string | null
           notes?: string | null
           patient_name: string
           phone_number?: string | null
+          service_id?: string | null
+          start_at?: string | null
           status?: string
           updated_at?: string
         }
@@ -43,11 +49,14 @@ export type Database = {
           appointment_date?: string
           appointment_type?: string | null
           created_at?: string
+          end_at?: string | null
           id?: string
           lead_id?: string | null
           notes?: string | null
           patient_name?: string
           phone_number?: string | null
+          service_id?: string | null
+          start_at?: string | null
           status?: string
           updated_at?: string
         }
@@ -57,6 +66,13 @@ export type Database = {
             columns: ["lead_id"]
             isOneToOne: false
             referencedRelation: "leads"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "appointments_service_id_fkey"
+            columns: ["service_id"]
+            isOneToOne: false
+            referencedRelation: "services"
             referencedColumns: ["id"]
           },
         ]
@@ -97,15 +113,59 @@ export type Database = {
         }
         Relationships: []
       }
-      leads: {
+      conversations: {
         Row: {
           created_at: string
+          id: string
+          last_message_at: string | null
+          lead_id: string | null
+          phone_number: string
+          status: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          last_message_at?: string | null
+          lead_id?: string | null
+          phone_number: string
+          status?: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          last_message_at?: string | null
+          lead_id?: string | null
+          phone_number?: string
+          status?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "conversations_lead_id_fkey"
+            columns: ["lead_id"]
+            isOneToOne: false
+            referencedRelation: "leads"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      leads: {
+        Row: {
+          consent: boolean | null
+          created_at: string
           email: string | null
+          funnel_stage: string | null
           goal: string | null
           id: string
+          last_contact_at: string | null
           name: string
           notes: string | null
+          objection: string | null
           phone: string | null
+          phone_number: string | null
+          pipeline_stage: string | null
           score: number | null
           source: string | null
           stage: string
@@ -113,13 +173,19 @@ export type Database = {
           updated_at: string
         }
         Insert: {
+          consent?: boolean | null
           created_at?: string
           email?: string | null
+          funnel_stage?: string | null
           goal?: string | null
           id?: string
+          last_contact_at?: string | null
           name: string
           notes?: string | null
+          objection?: string | null
           phone?: string | null
+          phone_number?: string | null
+          pipeline_stage?: string | null
           score?: number | null
           source?: string | null
           stage?: string
@@ -127,18 +193,92 @@ export type Database = {
           updated_at?: string
         }
         Update: {
+          consent?: boolean | null
           created_at?: string
           email?: string | null
+          funnel_stage?: string | null
           goal?: string | null
           id?: string
+          last_contact_at?: string | null
           name?: string
           notes?: string | null
+          objection?: string | null
           phone?: string | null
+          phone_number?: string | null
+          pipeline_stage?: string | null
           score?: number | null
           source?: string | null
           stage?: string
           tags?: string[] | null
           updated_at?: string
+        }
+        Relationships: []
+      }
+      messages: {
+        Row: {
+          content: string | null
+          conversation_id: string | null
+          created_at: string
+          direction: string
+          id: string
+          phone_number: string
+          provider: string | null
+          provider_message_id: string | null
+          raw_payload: Json | null
+        }
+        Insert: {
+          content?: string | null
+          conversation_id?: string | null
+          created_at?: string
+          direction: string
+          id?: string
+          phone_number: string
+          provider?: string | null
+          provider_message_id?: string | null
+          raw_payload?: Json | null
+        }
+        Update: {
+          content?: string | null
+          conversation_id?: string | null
+          created_at?: string
+          direction?: string
+          id?: string
+          phone_number?: string
+          provider?: string | null
+          provider_message_id?: string | null
+          raw_payload?: Json | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "messages_conversation_id_fkey"
+            columns: ["conversation_id"]
+            isOneToOne: false
+            referencedRelation: "conversations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      services: {
+        Row: {
+          active: boolean
+          created_at: string
+          duration_min: number
+          id: string
+          name: string
+        }
+        Insert: {
+          active?: boolean
+          created_at?: string
+          duration_min?: number
+          id?: string
+          name: string
+        }
+        Update: {
+          active?: boolean
+          created_at?: string
+          duration_min?: number
+          id?: string
+          name?: string
         }
         Relationships: []
       }
