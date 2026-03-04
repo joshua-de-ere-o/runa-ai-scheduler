@@ -327,11 +327,12 @@ serve(async (req) => {
       .from("clinic_settings").select("*").eq("id", 1).single();
 
     // ── 3. Webhook verification (GET) ───────────────────────
+    const webhookToken = Deno.env.get("YCLOUD_WEBHOOK_TOKEN") ?? settings?.yc_webhook_verify_token;
     if (req.method === "GET") {
       const url = new URL(req.url);
       const token = url.searchParams.get("verify_token") ?? url.searchParams.get("hub.verify_token");
       const challenge = url.searchParams.get("challenge") ?? url.searchParams.get("hub.challenge");
-      if (token === settings?.yc_webhook_verify_token) {
+      if (token === webhookToken) {
         return new Response(challenge ?? "ok", { headers: { "Content-Type": "text/plain" } });
       }
       return new Response("Unauthorized", { status: 401 });
@@ -340,8 +341,8 @@ serve(async (req) => {
     // ── 4. Parse payload ─────────────────────────────────────
     const payload = await req.json();
     const provider = new YCloudProvider(
-      Deno.env.get("YCLOUD_API_KEY") ?? settings?.yc_api_base_url ?? "",
-      Deno.env.get("YCLOUD_API_BASE_URL") ?? settings?.yc_api_base_url ?? "https://api.ycloud.com/v2",
+      Deno.env.get("YCLOUD_API_KEY") ?? "",
+      "https://api.ycloud.com/v2",
       Deno.env.get("YCLOUD_SENDER_ID") ?? settings?.yc_sender_id ?? ""
     );
     const parsed = provider.parseInbound(payload);
