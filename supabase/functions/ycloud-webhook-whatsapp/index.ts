@@ -67,21 +67,40 @@ class YCloudProvider {
     timestamp: string;
   } | null {
     try {
-      // YCloud webhook structure
-      const message = (payload as any)?.message ?? payload;
-      const from = message?.from ?? (payload as any)?.from;
+      const p = payload as any;
+      // YCloud webhook: { type: "whatsapp.inbound_message.received", message: { id, from, type, text: { body } } }
+      const message = p?.message ?? p?.data?.message ?? p;
+      const from =
+        message?.from ??
+        message?.waId ??
+        p?.from ??
+        "";
       const text =
         message?.text?.body ??
         message?.text ??
-        (payload as any)?.body ??
+        message?.body ??
+        p?.text ??
+        p?.body ??
         "";
-      const messageId = message?.id ?? (payload as any)?.messageId ?? "";
+      const messageId =
+        message?.id ??
+        message?.wamId ??
+        p?.messageId ??
+        p?.id ??
+        "";
       const timestamp =
-        message?.timestamp ?? (payload as any)?.timestamp ?? new Date().toISOString();
+        message?.createTime ??
+        message?.timestamp ??
+        p?.timestamp ??
+        new Date().toISOString();
 
-      if (!from || !messageId) return null;
+      if (!from || !messageId) {
+        console.log("parseInbound: missing from or messageId — message keys:", Object.keys(message ?? {}));
+        return null;
+      }
       return { from: String(from), text: String(text), messageId: String(messageId), timestamp: String(timestamp) };
-    } catch {
+    } catch (e) {
+      console.error("parseInbound error:", e);
       return null;
     }
   }
@@ -344,17 +363,27 @@ serve(async (req) => {
 
     // ── 4. Parse payload ─────────────────────────────────────
     const payload = await req.json();
+    console.log("YCloud raw payload:", JSON.stringify(payload));
     const provider = new YCloudProvider(
       Deno.env.get("YCLOUD_API_KEY") ?? "",
       "https://api.ycloud.com/v2",
       Deno.env.get("YCLOUD_SENDER_ID") ?? settings?.yc_sender_id ?? ""
     );
-    const parsed = provider.parseInbound(payload);
-    if (!parsed) {
-      console.log("YCloud: no parseable message in payload");
+
+    // Only process inbound text messages
+    const eventType = (payload as any)?.type ?? "";
+    if (eventType && !eventType.includes("inbound_message")) {
+      console.log("YCloud: skipping event type:", eventType);
       return new Response("ok", { status: 200 });
     }
-    const { from, text, messageId, timestamp } = parsed;
+
+    const parsed = provider.parseInbound(payload);
+    if (!parsed) {
+      console.log("YCloud: no parseable message in payload, keys:", Object.keys(payload));
+      return new Response("ok", { status: 200 });
+    }
+    const { from, text, messageId } = parsed;
+    console.log("YCloud parsed message — from:", from, "messageId:", messageId, "text:", text);
 
     // ── 5. Deduplication ─────────────────────────────────────
     const { data: existing } = await supabase
@@ -365,9 +394,13 @@ serve(async (req) => {
     }
 
     // ── 6. Upsert lead ───────────────────────────────────────
+    // leads table uses 'phone' column; phone_number is the extended column
     const { data: lead } = await supabase
       .from("leads")
-      .upsert({ phone_number: from, last_contact_at: new Date().toISOString() }, { onConflict: "phone_number" })
+      .upsert(
+        { phone: from, phone_number: from, name: from, last_contact_at: new Date().toISOString() },
+        { onConflict: "phone" }
+      )
       .select().single();
 
     // ── 7. Upsert conversation ───────────────────────────────
