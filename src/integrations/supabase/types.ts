@@ -14,7 +14,134 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      appointments: {
+        Row: {
+          appointment_date: string
+          appointment_type: string | null
+          created_at: string
+          id: string
+          lead_id: string | null
+          notes: string | null
+          patient_name: string
+          phone_number: string | null
+          status: string
+          updated_at: string
+        }
+        Insert: {
+          appointment_date: string
+          appointment_type?: string | null
+          created_at?: string
+          id?: string
+          lead_id?: string | null
+          notes?: string | null
+          patient_name: string
+          phone_number?: string | null
+          status?: string
+          updated_at?: string
+        }
+        Update: {
+          appointment_date?: string
+          appointment_type?: string | null
+          created_at?: string
+          id?: string
+          lead_id?: string | null
+          notes?: string | null
+          patient_name?: string
+          phone_number?: string | null
+          status?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "appointments_lead_id_fkey"
+            columns: ["lead_id"]
+            isOneToOne: false
+            referencedRelation: "leads"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      clinic_settings: {
+        Row: {
+          clinic_name: string | null
+          created_at: string
+          currency: string | null
+          id: string
+          monthly_revenue_goal: number | null
+          phone: string | null
+          ticket_avg: number | null
+          updated_at: string
+          working_hours: Json | null
+        }
+        Insert: {
+          clinic_name?: string | null
+          created_at?: string
+          currency?: string | null
+          id?: string
+          monthly_revenue_goal?: number | null
+          phone?: string | null
+          ticket_avg?: number | null
+          updated_at?: string
+          working_hours?: Json | null
+        }
+        Update: {
+          clinic_name?: string | null
+          created_at?: string
+          currency?: string | null
+          id?: string
+          monthly_revenue_goal?: number | null
+          phone?: string | null
+          ticket_avg?: number | null
+          updated_at?: string
+          working_hours?: Json | null
+        }
+        Relationships: []
+      }
+      leads: {
+        Row: {
+          created_at: string
+          email: string | null
+          goal: string | null
+          id: string
+          name: string
+          notes: string | null
+          phone: string | null
+          score: number | null
+          source: string | null
+          stage: string
+          tags: string[] | null
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          email?: string | null
+          goal?: string | null
+          id?: string
+          name: string
+          notes?: string | null
+          phone?: string | null
+          score?: number | null
+          source?: string | null
+          stage?: string
+          tags?: string[] | null
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          email?: string | null
+          goal?: string | null
+          id?: string
+          name?: string
+          notes?: string | null
+          phone?: string | null
+          score?: number | null
+          source?: string | null
+          stage?: string
+          tags?: string[] | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
