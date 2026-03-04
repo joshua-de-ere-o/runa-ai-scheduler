@@ -1,4 +1,5 @@
 import { motion } from "framer-motion";
+import kelyLeonLogo from "@/assets/kely-leon-logo.png";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -46,10 +47,7 @@ export default function Index() {
       <nav className="fixed top-0 left-0 right-0 z-50 bg-background/80 backdrop-blur-md border-b border-border">
         <div className="container flex items-center justify-between h-16">
           <div className="flex items-center gap-2">
-            <div className="w-8 h-8 rounded-lg gradient-green flex items-center justify-center">
-              <Leaf className="w-4 h-4 text-primary-foreground" />
-            </div>
-            <span className="font-bold text-foreground text-lg">Dra. Kely León</span>
+            <img src={kelyLeonLogo} alt="Kely León Nutrióloga" className="h-10 w-auto" />
           </div>
           <div className="hidden md:flex items-center gap-6 text-sm text-muted-foreground">
             <a href="#benefits" className="hover:text-foreground transition-colors">Beneficios</a>
