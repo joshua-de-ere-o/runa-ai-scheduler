@@ -78,7 +78,7 @@ export default function Index() {
         <div className="container relative">
           <div className="max-w-3xl mx-auto text-center">
             <motion.div variants={fadeUp} initial="hidden" animate="visible" custom={0}>
-              <Badge variant="secondary" className="mb-6 bg-accent text-accent-foreground border-0 px-4 py-1.5">
+              <Badge variant="secondary" className="mb-6 bg-muted text-primary border border-border px-4 py-1.5">
                 <Leaf className="w-3 h-3 mr-1.5" />
                 Nutriología Clínica · Dra. Kely León
               </Badge>
@@ -143,7 +143,7 @@ export default function Index() {
                 </div>
                 <div className="ml-auto w-2 h-2 bg-primary rounded-full animate-pulse" />
               </div>
-              <div className="bg-accent rounded-xl p-3 text-sm text-accent-foreground">
+              <div className="bg-muted rounded-xl p-3 text-sm text-foreground">
                 Hola, soy Erika 👋 ¿Buscas bajar grasa, mejorar digestión o recomposición corporal?
               </div>
               <div className="mt-3 flex gap-2">
@@ -163,7 +163,7 @@ export default function Index() {
             initial="hidden" whileInView="visible" viewport={{ once: true }}
             variants={fadeUp} className="text-center mb-16">
             
-            <Badge variant="secondary" className="mb-4 bg-accent text-accent-foreground border-0">Beneficios</Badge>
+            <Badge variant="secondary" className="mb-4 bg-muted text-primary border border-border">Beneficios</Badge>
             <h2 className="text-4xl font-extrabold text-foreground mb-4">Lo que obtenés en tu consulta</h2>
             <p className="text-muted-foreground text-lg max-w-2xl mx-auto">Un enfoque integral que va más allá de las dietas genéricas.</p>
           </motion.div>
@@ -193,7 +193,7 @@ export default function Index() {
             initial="hidden" whileInView="visible" viewport={{ once: true }}
             variants={fadeUp} className="text-center mb-16">
             
-            <Badge variant="secondary" className="mb-4 bg-accent text-accent-foreground border-0">El Método</Badge>
+            <Badge variant="secondary" className="mb-4 bg-muted text-primary border border-border">El Método</Badge>
             <h2 className="text-4xl font-extrabold text-foreground mb-4">Así es el proceso</h2>
             <p className="text-muted-foreground text-lg max-w-2xl mx-auto">Tres pasos simples para transformar tu relación con la alimentación.</p>
           </motion.div>
@@ -239,7 +239,7 @@ export default function Index() {
             initial="hidden" whileInView="visible" viewport={{ once: true }}
             variants={fadeUp} className="text-center mb-16">
             
-            <Badge variant="secondary" className="mb-4 bg-accent text-accent-foreground border-0">Testimonios</Badge>
+            <Badge variant="secondary" className="mb-4 bg-muted text-primary border border-border">Testimonios</Badge>
             <h2 className="text-4xl font-extrabold text-foreground mb-4">Lo que dicen nuestros pacientes</h2>
           </motion.div>
           <div className="grid md:grid-cols-3 gap-6 max-w-5xl mx-auto">
@@ -252,7 +252,7 @@ export default function Index() {
               
                 <div className="flex gap-0.5 mb-4">
                   {Array(t.stars).fill(0).map((_, j) =>
-                <Star key={j} className="w-4 h-4 fill-yellow-400 text-yellow-400" />
+                <Star key={j} className="w-4 h-4 fill-primary text-primary" />
                 )}
                 </div>
                 <p className="text-muted-foreground text-sm leading-relaxed mb-4">"{t.text}"</p>
@@ -276,7 +276,7 @@ export default function Index() {
             initial="hidden" whileInView="visible" viewport={{ once: true }}
             variants={fadeUp} className="text-center mb-16">
             
-            <Badge variant="secondary" className="mb-4 bg-accent text-accent-foreground border-0">FAQ</Badge>
+            <Badge variant="secondary" className="mb-4 bg-muted text-primary border border-border">FAQ</Badge>
             <h2 className="text-4xl font-extrabold text-foreground mb-4">Preguntas frecuentes</h2>
           </motion.div>
           <div className="space-y-4">
