@@ -314,24 +314,24 @@ serve(async (req) => {
   if (req.method === "OPTIONS") return new Response(null, { headers: corsHeaders });
 
   try {
-    // ── 1. Init clients ──────────────────────────────────────
+    // ── 1. Init Supabase (always needed) ─────────────────────
     const supabase = createClient(
       Deno.env.get("SUPABASE_URL")!,
       Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!
     );
-    const openai = new OpenAI({ apiKey: Deno.env.get("OPENAI_API_KEY")! });
-    const model = Deno.env.get("OPENAI_MODEL") ?? "gpt-4o-mini";
+    // OpenAI initialized lazily below — after webhook GET verification
 
     // ── 2. Load YCloud config ────────────────────────────────
     const { data: settings } = await supabase
       .from("clinic_settings").select("*").eq("id", 1).single();
 
     // ── 3. Webhook verification (GET) ───────────────────────
-    const webhookToken = Deno.env.get("YCLOUD_WEBHOOK_TOKEN") ?? settings?.yc_webhook_verify_token;
+    const webhookToken = (Deno.env.get("YCLOUD_WEBHOOK_TOKEN") ?? settings?.yc_webhook_verify_token ?? "").trim();
     if (req.method === "GET") {
       const url = new URL(req.url);
-      const token = url.searchParams.get("verify_token") ?? url.searchParams.get("hub.verify_token");
+      const token = (url.searchParams.get("verify_token") ?? url.searchParams.get("hub.verify_token") ?? "").trim();
       const challenge = url.searchParams.get("challenge") ?? url.searchParams.get("hub.challenge");
+      console.log("Webhook verify — received token:", token, "expected length:", webhookToken.length);
       if (token === webhookToken) {
         return new Response(challenge ?? "ok", { headers: { "Content-Type": "text/plain" } });
       }
@@ -467,6 +467,9 @@ FORMATO FECHAS
     ];
 
     // ── 15. OpenAI with tool calling loop ────────────────────
+    // Lazy init — only instantiated here so GET webhook verification works without OPENAI_API_KEY
+    const openai = new OpenAI({ apiKey: Deno.env.get("OPENAI_API_KEY") ?? "" });
+    const model = Deno.env.get("OPENAI_MODEL") ?? "gpt-4o-mini";
     let response = await openai.chat.completions.create({
       model, messages: chatMessages, tools: TOOLS, tool_choice: "auto",
     });
