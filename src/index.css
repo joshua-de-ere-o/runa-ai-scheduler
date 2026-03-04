@@ -29,10 +29,10 @@
     --muted: 163 47% 94%;            /* #EAF6F3 */
     --muted-foreground: 199 11% 47%; /* #6B7C85 */
 
-    --accent: 0 73% 58%;             /* #E34B4B */
-    --accent-foreground: 0 0% 100%;
+    --accent: 163 47% 94%;           /* #EAF6F3 mint – replaces red */
+    --accent-foreground: 175 62% 38%; /* teal dark */
 
-    --destructive: 0 73% 58%;        /* #E34B4B */
+    --destructive: 0 73% 58%;        /* #E34B4B – alerts only */
     --destructive-foreground: 0 0% 100%;
 
     --border: 180 18% 92%;           /* #E6EFEF */
@@ -78,8 +78,8 @@
     --secondary-foreground: 0 0% 100%;
     --muted: 207 24% 18%;
     --muted-foreground: 199 11% 60%;
-    --accent: 0 73% 58%;
-    --accent-foreground: 0 0% 100%;
+    --accent: 175 62% 20%;
+    --accent-foreground: 163 47% 90%;
     --border: 207 24% 20%;
     --input: 207 24% 20%;
     --sidebar-background: 207 24% 9%;
