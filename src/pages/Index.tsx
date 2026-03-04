@@ -49,8 +49,7 @@ export default function Index() {
             <div className="w-8 h-8 rounded-lg gradient-green flex items-center justify-center">
               <Leaf className="w-4 h-4 text-primary-foreground" />
             </div>
-            <span className="font-bold text-foreground text-lg">
-</span>
+            <span className="font-bold text-foreground text-lg">Dra. Kely León</span>
           </div>
           <div className="hidden md:flex items-center gap-6 text-sm text-muted-foreground">
             <a href="#benefits" className="hover:text-foreground transition-colors">Beneficios</a>
