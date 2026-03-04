@@ -5,8 +5,8 @@ import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import {
-  MessageCircle, Calendar, Users, BarChart3, Settings, Leaf,
-  Menu, X, LogOut, Bell, ChevronRight
+  MessageCircle, Calendar, Users, BarChart3, Settings,
+  Menu, X, LogOut, Bell, ChevronRight, TrendingUp
 } from "lucide-react";
 
 const NAV_ITEMS = [
@@ -14,6 +14,7 @@ const NAV_ITEMS = [
   { href: "/dashboard/agenda", icon: Calendar, label: "Agenda" },
   { href: "/dashboard/leads", icon: Users, label: "Leads & Funnel" },
   { href: "/dashboard/metrics", icon: BarChart3, label: "Métricas" },
+  { href: "/dashboard/performance", icon: TrendingUp, label: "Rendimiento" },
   { href: "/dashboard/settings", icon: Settings, label: "Configuración" },
 ];
 
