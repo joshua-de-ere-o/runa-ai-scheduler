@@ -1,4 +1,5 @@
 import { useState } from "react";
+import kelyLeonLogo from "@/assets/kely-leon-logo.png";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
@@ -30,15 +31,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
       )}>
         {/* Logo */}
         <div className="flex items-center gap-3 px-4 h-16 border-b border-border flex-shrink-0">
-          <div className="w-8 h-8 rounded-lg gradient-green flex items-center justify-center flex-shrink-0 shadow-green">
-            <Leaf className="w-4 h-4 text-primary-foreground" />
-          </div>
-          {sidebarOpen && (
-            <div className="overflow-hidden">
-              <p className="font-bold text-foreground text-sm leading-none">Runa AI</p>
-              <p className="text-xs text-muted-foreground mt-0.5">Dra. Kely León</p>
-            </div>
-          )}
+          <img src={kelyLeonLogo} alt="Kely León Nutrióloga" className={sidebarOpen ? "h-10 w-auto" : "h-8 w-8 object-contain"} />
         </div>
 
         {/* Nav */}
