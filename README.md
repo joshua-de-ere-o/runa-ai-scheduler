@@ -1,73 +1,95 @@
-# Welcome to your Lovable project
+# 🚀 Runa AI Scheduler
 
-## Project info
+**Runa AI Scheduler** es una plataforma avanzada de gestión y programación diseñada para optimizar la administración de clientes potenciales (leads), agendas y métricas de rendimiento en un entorno moderno y eficiente.
 
-**URL**: https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID
+Built with **React 18**, **Vite**, **TypeScript**, and **Supabase**.
 
-## How can I edit this code?
+---
 
-There are several ways of editing your application.
+## ✨ Características Principales
 
-**Use Lovable**
+- **📥 Bandeja de Entrada (Inbox):** Gestión centralizada de comunicaciones y notificaciones.
+- **📅 Agenda Inteligente:** Calendario interactivo para organizar citas y eventos.
+- **👤 Gestión de Leads:** Pipeline completo para el seguimiento de prospectos y clientes.
+- **📊 Métricas y Analítica:** Dashboards dinámicos con gráficos detallados sobre el rendimiento del negocio.
+- **⚡ Rendimiento (Performance):** Herramientas para medir y optimizar la conversión y eficacia.
+- **⚙️ Configuración Personalizada:** Panel de ajustes para adaptar la plataforma a tus necesidades.
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID) and start prompting.
+---
 
-Changes made via Lovable will be committed automatically to this repo.
+## 🛠️ Stack Tecnológico
 
-**Use your preferred IDE**
+- **Frontend:** [React 18](https://reactjs.org/) + [Vite](https://vitejs.dev/)
+- **Lenguaje:** [TypeScript](https://www.typescriptlang.org/)
+- **Estilos:** [Tailwind CSS](https://tailwindcss.com/)
+- **UI Components:** [shadcn/ui](https://ui.shadcn.com/) (Radix UI)
+- **Animaciones:** [Framer Motion](https://www.framer.com/motion/)
+- **Gráficos:** [Recharts](https://recharts.org/)
+- **Estado Asíncrono:** [React Query (@tanstack/react-query)](https://tanstack.com/query/latest)
+- **Formularios:** [React Hook Form](https://react-hook-form.com/) + [Zod](https://zod.dev/)
+- **Backend/Auth:** [Supabase](https://supabase.com/)
+- **Testing:** [Vitest](https://vitest.dev/)
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
+---
 
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
+## 🚀 Comenzando
 
-Follow these steps:
+### Requisitos Previos
 
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
+- [Node.js](https://nodejs.org/) (versión 18 o superior recomendada)
+- [npm](https://www.npmjs.com/) o [bun](https://bun.sh/)
 
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
+### Instalación
 
-# Step 3: Install the necessary dependencies.
-npm i
+1.  **Clona el repositorio:**
+    ```bash
+    git clone <url-del-repositorio>
+    cd runa-ai-scheduler
+    ```
 
-# Step 4: Start the development server with auto-reloading and an instant preview.
-npm run dev
+2.  **Instala las dependencias:**
+    ```bash
+    npm install
+    ```
+
+3.  **Configuración de Variables de Entorno:**
+    Crea un archivo `.env` en la raíz del proyecto y añade tus credenciales de Supabase:
+    ```env
+    VITE_SUPABASE_URL=tu_url_de_supabase
+    VITE_SUPABASE_ANON_KEY=tu_clave_anon_de_supabase
+    ```
+
+4.  **Inicia el servidor de desarrollo:**
+    ```bash
+    npm run dev
+    ```
+    La aplicación estará disponible en `http://localhost:8080` (o el puerto configurado).
+
+---
+
+## 📜 Scripts Disponibles
+
+- `npm run dev`: Inicia el servidor de desarrollo con Vite.
+- `npm run build`: Crea la versión de producción en la carpeta `dist`.
+- `npm run lint`: Ejecuta ESLint para analizar el código.
+- `npm run test`: Ejecuta las pruebas unitarias con Vitest.
+- `npm run preview`: Previsualiza localmente la versión de producción.
+
+---
+
+## 📂 Estructura del Proyecto
+
+```text
+src/
+├── components/     # Componentes de UI (shadcn) y de negocio.
+├── hooks/          # Hooks personalizados de React.
+├── integrations/   # Configuración de servicios (Supabase).
+├── lib/            # Utilidades y funciones auxiliares.
+├── pages/          # Vistas principales de la aplicación.
+│   └── dashboard/  # Sub-páginas del panel de control.
+└── App.tsx         # Configuración de rutas y proveedores.
 ```
 
-**Edit a file directly in GitHub**
+---
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
-
-**Use GitHub Codespaces**
-
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
-
-## What technologies are used for this project?
-
-This project is built with:
-
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
-
-## How can I deploy this project?
-
-Simply open [Lovable](https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID) and click on Share -> Publish.
-
-## Can I connect a custom domain to my Lovable project?
-
-Yes, you can!
-
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
-
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/features/custom-domain#custom-domain)
+Desarrollado con ❤️ para una gestión de IA eficiente.
